@@ -10,7 +10,6 @@
         </nav>
       </div>
     </header> -->
-<div>
   <main role="main" class="inner cover">
     <div class="tax-code-card">
       <div class="header-card">
@@ -65,13 +64,6 @@
       </div>
     </div>
   </main>
-
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
-      <p>Our link <a href="#">Github Alessia</a>, <a href="#">Github Cristiano</a>.</p>
-    </div>
-  </footer>
-</div>
 </template>
 
 <script>
