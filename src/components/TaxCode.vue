@@ -55,7 +55,7 @@
               </div>
               <label class="col-sm-2 col-form-label" for="BirthData">DATA DI NASCITA</label>
               <div class="col-md-5">
-                <!-- <datepicker :value="state.date"></datepicker> -->
+                <datepicker></datepicker>
                 <input v-model="birthDate" type="datepicker" class="form-control" id="BirthData" placeholder="Data di nascita">
               </div>
             </div>
@@ -67,6 +67,8 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker';
+
 export default {
   name: 'TaxCode',
   data () {
@@ -84,6 +86,9 @@ export default {
     createTaxCode: function (event) {
       this.taxCodeOut = `tredas ${this.birthDate}`
     }
+  },
+  components: {
+    Datepicker
   }
 }
 </script>

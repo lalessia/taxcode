@@ -21,11 +21,6 @@ export default {
   name: 'HeaderComponent',
   components: {
     bNav
-  },
-  data () {
-    return {
-      msg: ''
-    }
   }
 }
 </script>

@@ -10,11 +10,6 @@
 
 export default {
   name: 'FooterComponent'
-  // data () {
-  //   return {
-  //     msg: ''
-  //   }
-  // }
 }
 </script>
 
