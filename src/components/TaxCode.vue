@@ -83,16 +83,18 @@ export default {
   },
   methods: {
     createTaxCode: function() {
-            this.taxCodeOut = `tredas ${this.birthDate}`
+      this.taxCodeOut = `tredas ${this.birthDate}`
     },
     loadDistrict: function(callback) {
       const endpointUrl = 'https://query.wikidata.org/sparql',
-        sparqlQuery = `select distinct ?comune_it ?label ?codcat {
-          ?comune_it wdt:P31 wd:Q747074.
-          ?comune_it rdfs:label ?label .
-          filter langMatches(lang(?label),"it")
-          OPTIONAL { ?comune_it wdt:P806 ?codcat. }
-        }`,
+        sparqlQuery =
+        `SELECT DISTINCT ?comune_it ?label ?codcat ?codice_immatricolazione WHERE {
+            ?comune_it wdt:P31 wd:Q747074.
+            ?comune_it rdfs:label ?label.
+            OPTIONAL { ?comune_it wdt:P806 ?codcat. }
+            FILTER(LANGMATCHES(LANG(?label), "it"))
+            OPTIONAL { ?comune_it wdt:P395 ?codice_immatricolazione. }
+          }`,
         fullUrl = endpointUrl + '?query=' + encodeURIComponent(sparqlQuery),
         headers = {
           'Accept': 'application/sparql-results+json'
@@ -101,21 +103,9 @@ export default {
       fetch(fullUrl, {
         headers
       }).then(body => body.json()).then(json => {
-        if(json) callback(json);
-        // const {
-        //   head: {
-        //     vars
-        //   },
-        //   results
-        // } = json;
-        //
-        // for (const result of results.bindings) {
-        //   for (const variable of vars) {
-        //     console.log('%s: %o', variable, result[variable])
-        //   }
-        //   console.log('---')
-        // }
-      })
+        console.log(json);
+        if (json) callback(json);
+      });
     }
   },
   beforeMount() {
