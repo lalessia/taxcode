@@ -129,10 +129,10 @@ export default {
     },
 
     checkDate: function() {
-      this.errors = [];
-      if (!this.birthDate) {
-        this.errors.push('Please select your date of birth!');
-      }
+      // this.errors = [];
+      // if (!this.birthDate) {
+      //   this.errors.push('Please select your date of birth!');
+      // }
       const date = new Date(this.birthDate);
       const day = date.getDate();
       const month = date.getMonth() + 1;
@@ -193,7 +193,6 @@ export default {
     },
 
     LastCharResult: function(){
-      console.log("sono pronto a calcolare l'ultima cifra a partire da: " + this.taxCodeOut);
       var evenValues = [];
       var oddValues = [];
 
@@ -203,6 +202,109 @@ export default {
       for(var i = 1; i < this.taxCodeOut.length; i+=2){
         evenValues[evenValues.length] = [this.taxCodeOut[i]];
       }
+
+      var evenValuesSchema = new Array();
+      evenValuesSchema.push({char: 0, value: 0});
+      evenValuesSchema.push({char: 1, value: 1});
+      evenValuesSchema.push({char: 2, value: 2});
+      evenValuesSchema.push({char: 3, value: 3});
+      evenValuesSchema.push({char: 4, value: 4});
+      evenValuesSchema.push({char: 5, value: 5});
+      evenValuesSchema.push({char: 6, value: 6});
+      evenValuesSchema.push({char: 7, value: 7});
+      evenValuesSchema.push({char: 8, value: 8});
+      evenValuesSchema.push({char: 9, value: 9});
+      evenValuesSchema.push({char: 'A', value: 0});
+      evenValuesSchema.push({char: 'B', value: 1});
+      evenValuesSchema.push({char: 'C', value: 2});
+      evenValuesSchema.push({char: 'D', value: 3});
+      evenValuesSchema.push({char: 'E', value: 4});
+      evenValuesSchema.push({char: 'F', value: 5});
+      evenValuesSchema.push({char: 'G', value: 6});
+      evenValuesSchema.push({char: 'H', value: 7});
+      evenValuesSchema.push({char: 'I', value: 8});
+      evenValuesSchema.push({char: 'J', value: 9});
+      evenValuesSchema.push({char: 'K', value: 10});
+      evenValuesSchema.push({char: 'L', value: 11});
+      evenValuesSchema.push({char: 'M', value: 12});
+      evenValuesSchema.push({char: 'N', value: 13});
+      evenValuesSchema.push({char: 'O', value: 14});
+      evenValuesSchema.push({char: 'P', value: 15});
+      evenValuesSchema.push({char: 'Q', value: 16});
+      evenValuesSchema.push({char: 'R', value: 17});
+      evenValuesSchema.push({char: 'S', value: 18});
+      evenValuesSchema.push({char: 'T', value: 19});
+      evenValuesSchema.push({char: 'U', value: 20});
+      evenValuesSchema.push({char: 'V', value: 21});
+      evenValuesSchema.push({char: 'W', value: 22});
+      evenValuesSchema.push({char: 'X', value: 23});
+      evenValuesSchema.push({char: 'Y', value: 24});
+      evenValuesSchema.push({char: 'Z', value: 25});
+
+      var oddValuesSchema = new Array();
+      oddValuesSchema.push({char: 0, value: 1});
+      oddValuesSchema.push({char: 1, value: 0});
+      oddValuesSchema.push({char: 2, value: 5});
+      oddValuesSchema.push({char: 3, value: 7});
+      oddValuesSchema.push({char: 4, value: 9});
+      oddValuesSchema.push({char: 5, value: 13});
+      oddValuesSchema.push({char: 6, value: 15});
+      oddValuesSchema.push({char: 7, value: 17});
+      oddValuesSchema.push({char: 8, value: 19});
+      oddValuesSchema.push({char: 9, value: 21});
+      oddValuesSchema.push({char: 'A', value: 1});
+      oddValuesSchema.push({char: 'B', value: 0});
+      oddValuesSchema.push({char: 'C', value: 5});
+      oddValuesSchema.push({char: 'D', value: 7});
+      oddValuesSchema.push({char: 'E', value: 9});
+      oddValuesSchema.push({char: 'F', value: 13});
+      oddValuesSchema.push({char: 'G', value: 15});
+      oddValuesSchema.push({char: 'H', value: 17});
+      oddValuesSchema.push({char: 'I', value: 19});
+      oddValuesSchema.push({char: 'J', value: 21});
+      oddValuesSchema.push({char: 'K', value: 2});
+      oddValuesSchema.push({char: 'L', value: 4});
+      oddValuesSchema.push({char: 'M', value: 18});
+      oddValuesSchema.push({char: 'N', value: 20});
+      oddValuesSchema.push({char: 'O', value: 11});
+      oddValuesSchema.push({char: 'P', value: 3});
+      oddValuesSchema.push({char: 'Q', value: 6});
+      oddValuesSchema.push({char: 'R', value: 8});
+      oddValuesSchema.push({char: 'S', value: 12});
+      oddValuesSchema.push({char: 'T', value: 14});
+      oddValuesSchema.push({char: 'U', value: 16});
+      oddValuesSchema.push({char: 'V', value: 10});
+      oddValuesSchema.push({char: 'W', value: 22});
+      oddValuesSchema.push({char: 'X', value: 25});
+      oddValuesSchema.push({char: 'Y', value: 24});
+      oddValuesSchema.push({char: 'Z', value: 23});
+
+      var totalResult = 0;
+      var singleValue = 0;
+      for(var i = 0; i < oddValues.length; i++){
+        singleValue = oddValuesSchema.filter(function (el){
+          var value = 0
+          if(el.char == oddValues[i][0]){
+            value = el.value;
+            totalResult += value;
+            return value;
+          }
+        });
+      }
+      for(var i = 0; i < evenValues.length; i++){
+        singleValue = evenValuesSchema.filter(function (el){
+          var value = 0
+          if(el.char == evenValues[i][0]){
+            value = el.value;
+            totalResult += value;
+            return value;
+          }
+        });
+      }
+
+      var lastChar = '';
+      lastChar = String.fromCharCode((totalResult % 26) + 65);
+      return lastChar;
     },
 
     createTaxCode: function() {
@@ -212,6 +314,7 @@ export default {
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
       var LastCharResult = this.LastCharResult();
+      this.taxCodeOut +=LastCharResult;
     },
 
     loadDistrict: function(callback) {
