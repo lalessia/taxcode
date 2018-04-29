@@ -14,7 +14,15 @@
   <div class="tax-code-card">
     <div class="header-card"></div>
     <div class="content-card">
-      <form id="taxCodeForm" v-on:submit="createTaxCode">
+      <form id="taxCodeForm" v-on:submit="checkForm">
+
+        <p v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+        </p>
+
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="taxCode">CODICE FISCALE</label>
           <div class="col-sm-10">
@@ -24,13 +32,19 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="surname">COGNOME</label>
           <div class="col-sm-10">
-            <input v-model="surname" type="text" class="form-control" id="surname" placeholder="Cognome">
+            <input v-model="surname" v-bind:class="{error: isSurError}" type="text"
+              class="form-control" id="surname" placeholder="Cognome"
+              @input="forceUpperCase('surname')"
+            >
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="name">NOME</label>
           <div class="col-sm-6">
-            <input v-model="name" type="text" class="form-control" id="name" placeholder="Nome">
+            <input v-model="name" v-bind:class="{error: isNameError}" type="text"
+              class="form-control" id="name" placeholder="Nome"
+              @input="forceUpperCase('name')"
+            >
           </div>
           <label class="col-sm-2 col-form-label" for="sex">SESSO</label>
           <div class="col-sm-2">
@@ -57,7 +71,7 @@
             <!-- <input v-model="birthDate" type="datepicker" class="form-control" id="BirthData" placeholder="Data di nascita"> -->
           </div>
         </div>
-        <button type="submit">Calcola</button>
+        <input type="submit" value="Submit">
       </form>
     </div>
   </div>
@@ -71,6 +85,9 @@ export default {
   name: 'TaxCode',
   data() {
     return {
+      isSurError: false,
+      isNameError: false,
+      errors:[],
       taxCodeOut: '',
       surname: '',
       name: '',
@@ -82,8 +99,44 @@ export default {
     }
   },
   methods: {
+    checkName:function(){
+      const re = /[0-9\[.,\/#!$%\^&\*;:{}=\-_`~()\]\s]/g;
+      const found = this.name.match(re);
+      this.errors = [];
+      if(!this.name) this.isNameError = true;
+      if(found) {
+        this.errors.push("Not a valid name!");
+        return this.isNameError = true;
+      }
+      if(this.name) {
+        this.isNameError = false;
+        return true;
+      }
+
+      return ;
+    },
+    checkSurname: function(){
+      const re = /[0-9\[.,\/#!$%\^&\*;:{}=\-_`~()\]\s]/g;
+      const found = this.surname.match(re);
+      this.errors = [];
+      if(!this.surname) this.isSurError = true;
+      if(found) {
+        this.errors.push("Not a valid name!");
+        return this.isSurError = true;
+      }
+      if(this.surname) {
+        this.isSurError = false;
+        return true;
+      }
+    },
+    checkForm:function() {
+      this.checkName();
+      this.checkSurname();
+      this.createTaxCode();
+    },
+
     createTaxCode: function() {
-      this.taxCodeOut = `tredas ${this.birthDate}`
+      console.log('nome è: ' + this.name);
     },
     loadDistrict: function(callback) {
       const endpointUrl = 'https://query.wikidata.org/sparql',
@@ -106,6 +159,9 @@ export default {
         console.log(json);
         if (json) callback(json);
       });
+    },
+    forceUpperCase(prop) {
+      this[prop] = this[prop].toUpperCase();
     }
   },
   beforeMount() {
@@ -142,6 +198,10 @@ li {
 
 a {
   color: #42b983;
+}
+
+.error {
+  border: 1px solid red;
 }
 
 .cover {
