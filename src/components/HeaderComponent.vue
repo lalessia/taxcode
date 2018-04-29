@@ -12,17 +12,17 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import bNav from 'bootstrap-vue/es/components/nav/nav'
+import Vue from 'vue';
+import bNav from 'bootstrap-vue/es/components/nav/nav';
 
-Vue.component('b-nav', bNav)
+Vue.component('b-nav', bNav);
 
 export default {
   name: 'HeaderComponent',
   components: {
     bNav
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
