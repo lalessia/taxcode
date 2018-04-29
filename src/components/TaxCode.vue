@@ -110,7 +110,6 @@ export default {
         this.errors.push('Not a valid name!');
         return this.isNameError = true;
       }
-
       return this.isNameError = false;
     },
     checkSurname: function() {
@@ -178,12 +177,26 @@ export default {
       return result;
     },
 
+    LastCharResult: function(){
+      console.log("sono pronto a calcolare l'ultima cifra a partire da: " + this.taxCodeOut);
+      var evenValues = [];
+      var oddValues = [];
+
+      for(var i = 0; i < this.taxCodeOut.length; i+=2){
+        oddValues[oddValues.length] = [this.taxCodeOut[i]];
+      }
+      for(var i = 1; i < this.taxCodeOut.length; i+=2){
+        evenValues[evenValues.length] = [this.taxCodeOut[i]];
+      }
+    },
+
     createTaxCode: function() {
       console.log('La data di nascita: ' + this.birthDate);
       var surnameResult = this.stringResult(this.surname);
       var nameResult = this.stringResult(this.name);
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
+      var LastCharResult = this.LastCharResult();
     },
 
     loadDistrict: function(callback) {
