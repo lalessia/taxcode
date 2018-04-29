@@ -136,9 +136,56 @@ export default {
       this.createTaxCode();
     },
 
-    createTaxCode: function() {
-      console.log('nome è: ' + this.name);
+    stringResult: function(stringCheck) {
+      var result;
+      var vocals = ['A', 'E', 'I', 'O', 'U'];
+      for(var i = 0; i < stringCheck.length; i++){
+        var isVocal = vocals.includes(stringCheck[i]);
+        //alert(this.surname[i] + ' è una vocale: ' + isVocal);
+        if(!isVocal){
+          if(result === undefined){
+            result = stringCheck[i];
+          }else{
+            result += stringCheck[i];
+          }
+        }
+      }
+
+      if(result.length < 3){
+        for(var i = 0; i < stringCheck.length; i++){
+          var isVocal = vocals.includes(stringCheck[i]);
+          //alert(this.surname[i] + ' è una vocale: ' + isVocal);
+          if(isVocal){
+            if(result === undefined){
+              result = stringCheck[i];
+            }else{
+              result += stringCheck[i];
+            }
+          }
+        }
+      }
+
+      if(result.length < 3){
+        for(var i = result.length; i < 3; i++){
+          if(result === undefined){
+            result = 'X';
+          }else{
+            result += 'X';
+          }
+        }
+      }
+      return result;
     },
+
+    createTaxCode: function() {
+      var surnameResult = this.stringResult(this.surname);
+      var nameResult = this.stringResult(this.name);
+      console.log('surnameResult: ' + surnameResult);
+      console.log('nameResult: ' + nameResult);
+      this.taxCodeOut = surnameResult;
+      this.taxCodeOut += nameResult;
+    },
+
     loadDistrict: function(callback) {
       const endpointUrl = 'https://query.wikidata.org/sparql';
       const sparqlQuery =
@@ -157,7 +204,7 @@ export default {
       fetch(fullUrl, {
         headers
       }).then(body => body.json()).then(json => {
-        console.log(json);
+        //console.log(json);
         if (json) callback(json);
       });
     },
@@ -167,11 +214,9 @@ export default {
   },
   beforeMount() {
     this.loadDistrict(output => {
-      console.log(output.results.bindings);
       let test = output.results.bindings.filter(function(dist) {
         return dist.label.value === 'Palermo';
       });
-      console.log(test);
     });
   },
   components: {
