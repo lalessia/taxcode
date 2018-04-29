@@ -68,7 +68,6 @@
           <label class="col-sm-2 col-form-label" for="BirthData">DATA DI NASCITA</label>
           <div class="col-md-5">
             <datepicker v-model="birthDate" id="BirthDate"></datepicker>
-            <!-- <input v-model="birthDate" type="datepicker" class="form-control" id="BirthData" placeholder="Data di nascita"> -->
           </div>
         </div>
         <input type="submit" value="Submit">
@@ -98,6 +97,7 @@ export default {
       districts: {}
     };
   },
+
   methods: {
     checkName: function() {
       const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
@@ -115,6 +115,7 @@ export default {
 
       return this.isNameError = false;
     },
+
     checkSurname: function() {
       const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
       const foundErr = this.surname.match(re);
@@ -130,7 +131,21 @@ export default {
       // }
       return this.isSurError = false;
     },
+
+    checkDate: function() {
+      this.errors = [];
+      if (!this.birthDate) {
+        this.errors.push('Please select your date of birth!');
+      }
+      const date = new Date(this.birthDate);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      console.log(`Birthate: ${day}/${month}/${year}`);
+    },
+
     checkForm: function() {
+      this.checkDate();
       this.checkName();
       this.checkSurname();
       this.createTaxCode();
