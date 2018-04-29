@@ -103,15 +103,13 @@ export default {
       const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
       const foundErr = this.name.match(re);
       this.errors = [];
-      if (!this.name) this.isNameError = true;
+      if (!this.name) {
+        return this.isNameError = true;
+      }
       if (foundErr) {
         this.errors.push('Not a valid name!');
         return this.isNameError = true;
       }
-      // if(this.name) {
-      //   this.isNameError = false;
-      //   return true;
-      // }
 
       return this.isNameError = false;
     },
@@ -119,21 +117,24 @@ export default {
       const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
       const foundErr = this.surname.match(re);
       this.errors = [];
-      if (!this.surname) this.isSurError = true;
+      if (!this.surname) {
+        //this.isSurError = true;
+        return this.isSurError = true;
+      }
       if (foundErr) {
         this.errors.push('Not a valid surname!');
         return this.isSurError = true;
       }
-      // if(this.surname) {
-      //   this.isSurError = false;
-      //   return true;
-      // }
       return this.isSurError = false;
     },
     checkForm: function() {
-      this.checkName();
-      this.checkSurname();
-      this.createTaxCode();
+
+      var checkName = this.checkName();
+      var checkSurname = this.checkSurname();
+
+      if(!checkName && !checkSurname){
+        this.createTaxCode();
+      }
     },
 
     stringResult: function(stringCheck) {
@@ -178,10 +179,9 @@ export default {
     },
 
     createTaxCode: function() {
+      console.log('La data di nascita: ' + this.birthDate);
       var surnameResult = this.stringResult(this.surname);
       var nameResult = this.stringResult(this.name);
-      console.log('surnameResult: ' + surnameResult);
-      console.log('nameResult: ' + nameResult);
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
     },
