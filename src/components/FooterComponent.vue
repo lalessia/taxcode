@@ -10,7 +10,7 @@
 
 export default {
   name: 'FooterComponent'
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

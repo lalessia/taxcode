@@ -19,7 +19,7 @@
         <p v-if="errors.length">
           <b>Please correct the following error(s):</b>
           <ul>
-            <li v-for="error in errors">{{ error }}</li>
+            <li v-bind:for="error in errors">{{ error }}</li>
           </ul>
         </p>
 
@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import Datepicker from 'vuejs-datepicker'
+import Datepicker from 'vuejs-datepicker';
 
 export default {
   name: 'TaxCode',
@@ -87,7 +87,7 @@ export default {
     return {
       isSurError: false,
       isNameError: false,
-      errors:[],
+      errors: [],
       taxCodeOut: '',
       surname: '',
       name: '',
@@ -96,40 +96,41 @@ export default {
       district: '',
       birthDate: '',
       districts: {}
-    }
+    };
   },
   methods: {
-    checkName:function(){
-      const re = /[0-9\[.,\/#!$%\^&\*;:{}=\-_`~()\]\s]/g;
-      const found = this.name.match(re);
+    checkName: function() {
+      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
+      const foundErr = this.name.match(re);
       this.errors = [];
-      if(!this.name) this.isNameError = true;
-      if(found) {
-        this.errors.push("Not a valid name!");
+      if (!this.name) this.isNameError = true;
+      if (foundErr) {
+        this.errors.push('Not a valid name!');
         return this.isNameError = true;
       }
-      if(this.name) {
-        this.isNameError = false;
-        return true;
-      }
+      // if(this.name) {
+      //   this.isNameError = false;
+      //   return true;
+      // }
 
-      return ;
+      return this.isNameError = false;
     },
-    checkSurname: function(){
-      const re = /[0-9\[.,\/#!$%\^&\*;:{}=\-_`~()\]\s]/g;
-      const found = this.surname.match(re);
+    checkSurname: function() {
+      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
+      const foundErr = this.surname.match(re);
       this.errors = [];
-      if(!this.surname) this.isSurError = true;
-      if(found) {
-        this.errors.push("Not a valid name!");
+      if (!this.surname) this.isSurError = true;
+      if (foundErr) {
+        this.errors.push('Not a valid surname!');
         return this.isSurError = true;
       }
-      if(this.surname) {
-        this.isSurError = false;
-        return true;
-      }
+      // if(this.surname) {
+      //   this.isSurError = false;
+      //   return true;
+      // }
+      return this.isSurError = false;
     },
-    checkForm:function() {
+    checkForm: function() {
       this.checkName();
       this.checkSurname();
       this.createTaxCode();
@@ -139,19 +140,19 @@ export default {
       console.log('nome è: ' + this.name);
     },
     loadDistrict: function(callback) {
-      const endpointUrl = 'https://query.wikidata.org/sparql',
-        sparqlQuery =
+      const endpointUrl = 'https://query.wikidata.org/sparql';
+      const sparqlQuery =
         `SELECT DISTINCT ?comune_it ?label ?codcat ?codice_immatricolazione WHERE {
             ?comune_it wdt:P31 wd:Q747074.
             ?comune_it rdfs:label ?label.
             OPTIONAL { ?comune_it wdt:P806 ?codcat. }
             FILTER(LANGMATCHES(LANG(?label), "it"))
             OPTIONAL { ?comune_it wdt:P395 ?codice_immatricolazione. }
-          }`,
-        fullUrl = endpointUrl + '?query=' + encodeURIComponent(sparqlQuery),
-        headers = {
-          'Accept': 'application/sparql-results+json'
-        };
+          }`;
+      const fullUrl = endpointUrl + '?query=' + encodeURIComponent(sparqlQuery);
+      const headers = {
+        'Accept': 'application/sparql-results+json'
+      };
 
       fetch(fullUrl, {
         headers
@@ -176,7 +177,7 @@ export default {
   components: {
     Datepicker
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
