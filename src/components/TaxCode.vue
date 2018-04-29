@@ -139,37 +139,37 @@ export default {
     stringResult: function(stringCheck) {
       var result;
       var vocals = ['A', 'E', 'I', 'O', 'U'];
-      for(var i = 0; i < stringCheck.length; i++){
+      for (var i = 0; i < stringCheck.length; i++) {
         var isVocal = vocals.includes(stringCheck[i]);
-        //alert(this.surname[i] + ' è una vocale: ' + isVocal);
-        if(!isVocal){
-          if(result === undefined){
+        // alert(this.surname[i] + ' è una vocale: ' + isVocal);
+        if (!isVocal) {
+          if (result === undefined) {
             result = stringCheck[i];
-          }else{
+          } else {
             result += stringCheck[i];
           }
         }
       }
 
-      if(result.length < 3){
-        for(var i = 0; i < stringCheck.length; i++){
+      if (result.length < 3) {
+        for (var i = 0; i < stringCheck.length; i++) {
           var isVocal = vocals.includes(stringCheck[i]);
-          //alert(this.surname[i] + ' è una vocale: ' + isVocal);
-          if(isVocal){
-            if(result === undefined){
+          // alert(this.surname[i] + ' è una vocale: ' + isVocal);
+          if (isVocal) {
+            if (result === undefined) {
               result = stringCheck[i];
-            }else{
+            } else {
               result += stringCheck[i];
             }
           }
         }
       }
 
-      if(result.length < 3){
-        for(var i = result.length; i < 3; i++){
-          if(result === undefined){
+      if (result.length < 3) {
+        for (var i = result.length; i < 3; i++) {
+          if (result === undefined) {
             result = 'X';
-          }else{
+          } else {
             result += 'X';
           }
         }
@@ -204,7 +204,7 @@ export default {
       fetch(fullUrl, {
         headers
       }).then(body => body.json()).then(json => {
-        //console.log(json);
+        // console.log(json);
         if (json) callback(json);
       });
     },
