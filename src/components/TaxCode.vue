@@ -67,7 +67,7 @@
           </div>
           <label class="col-sm-2 col-form-label" for="BirthData">DATA DI NASCITA</label>
           <div class="col-md-5">
-            <datepicker v-model="birthDate" id="BirthDate"></datepicker>
+            <datepicker v-model="birthDate" v-bind:class="{error: isBirthDateError}" id="BirthDate"></datepicker>
           </div>
         </div>
         <input type="submit" value="Submit">
@@ -86,6 +86,7 @@ export default {
     return {
       isSurError: false,
       isNameError: false,
+      isBirthDateError: false,
       errors: [],
       taxCodeOut: '',
       surname: '',
@@ -129,24 +130,21 @@ export default {
     },
 
     checkDate: function() {
-      // this.errors = [];
-      // if (!this.birthDate) {
-      //   this.errors.push('Please select your date of birth!');
-      // }
-      const date = new Date(this.birthDate);
-      const day = date.getDate();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      console.log(`Birthate: ${day}/${month}/${year}`);
+      this.errors = [];
+      if (!this.birthDate) {
+        return this.isBirthDateError = true;
+      }
+      return this.isBirthDateError = false;
     },
 
     checkForm: function() {
 
       var checkName = this.checkName();
       var checkSurname = this.checkSurname();
+      var checkDate = this.checkDate();
       this.checkDate();
 
-      if(!checkName && !checkSurname){
+      if(!checkName && !checkSurname && !checkDate){
         this.createTaxCode();
       }
     },
@@ -192,7 +190,30 @@ export default {
       return result;
     },
 
-    LastCharResult: function(){
+    birthDateResult: function(){
+      var result = '';
+      const date = new Date(this.birthDate);
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
+      //console.log(`Birthate: ${day}/${month}/${year}`);
+
+      var y = year.toString().substr(2);
+      result += y;
+
+      var genericMonth = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'];
+      result += genericMonth[month];
+      var d = '';
+      if(this.sex === 'M'){
+        day < 10 ? d = ('0' + day.toString()) : d = day.toString();
+      } else if (this.sex === 'F') {
+        d = (day + 40).toString();
+      }
+      result += d;
+      return result;
+    },
+
+    lastCharResult: function(){
       var evenValues = [];
       var oddValues = [];
 
@@ -308,13 +329,14 @@ export default {
     },
 
     createTaxCode: function() {
-      console.log('La data di nascita: ' + this.birthDate);
       var surnameResult = this.stringResult(this.surname);
       var nameResult = this.stringResult(this.name);
+      var birthResult = this.birthDateResult(this.birthDate);
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
-      var LastCharResult = this.LastCharResult();
-      this.taxCodeOut +=LastCharResult;
+      this.taxCodeOut += birthResult;
+      var lastCharResult = this.lastCharResult();
+      this.taxCodeOut +=lastCharResult;
     },
 
     loadDistrict: function(callback) {
