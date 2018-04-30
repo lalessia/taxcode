@@ -57,13 +57,13 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="birthPlace">LUOGO DI NASCITA</label>
           <div class="col-sm-10">
-            <input v-model="birthPlace" type="text" class="form-control" id="birthPlace" placeholder="Luogo di Nascita">
+            <input v-model="birthPlace" v-bind:class="{error: isBirthPlaceError}" type="text" class="form-control" id="birthPlace" placeholder="Luogo di Nascita">
           </div>
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="district">PROVINCIA</label>
           <div class="col-md-3">
-            <input v-model="district" type="text" class="form-control" id="district" placeholder="Provincia">
+            <input v-model="district" type="text" class="form-control" id="district" placeholder="Provincia" disabled>
           </div>
           <label class="col-sm-2 col-form-label" for="BirthData">DATA DI NASCITA</label>
           <div class="col-md-5">
@@ -87,6 +87,7 @@ export default {
       isSurError: false,
       isNameError: false,
       isBirthDateError: false,
+      isBirthPlaceError: false,
       errors: [],
       taxCodeOut: '',
       surname: '',
@@ -137,11 +138,19 @@ export default {
       return this.isBirthDateError = false;
     },
 
-    checkForm: function() {
+    checkBirthPlace: function() {
+      this.errors = [];
+      if (!this.birthPlace) {
+        return this.isBirthPlaceError = true;
+      }
+      return this.isBirthPlaceError = false;
+    },
 
+    checkForm: function() {
       var checkName = this.checkName();
       var checkSurname = this.checkSurname();
       var checkDate = this.checkDate();
+      var checkBirthPlace = this.checkBirthPlace();
       this.checkDate();
 
       if(!checkName && !checkSurname && !checkDate){
@@ -203,6 +212,7 @@ export default {
 
       var genericMonth = ['A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'];
       result += genericMonth[month];
+
       var d = '';
       if(this.sex === 'M'){
         day < 10 ? d = ('0' + day.toString()) : d = day.toString();
