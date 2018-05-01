@@ -19,7 +19,7 @@
         <p v-if="errors.length">
           <b>Please correct the following error(s):</b>
           <ul>
-            <li v-bind:for="error in errors">{{ error }}</li>
+            <li v-for="(error, index) in errors" :key="`error-${index}`">{{ error }}</li>
           </ul>
         </p>
 
@@ -63,7 +63,7 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="district">PROVINCIA</label>
           <div class="col-md-3">
-            <input v-model="district" type="text" class="form-control" id="district" placeholder="Provincia">
+            <input v-model="district" type="text" class="form-control" id="district" placeholder="Provincia" disabled>
           </div>
           <label class="col-sm-2 col-form-label" for="BirthData">DATA DI NASCITA</label>
           <div class="col-md-5">
@@ -79,6 +79,7 @@
 
 <script>
 import Datepicker from 'vuejs-datepicker';
+import { regex } from '../handlers';
 
 export default {
   name: 'TaxCode',
@@ -100,29 +101,31 @@ export default {
 
   methods: {
     checkName: function() {
-      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
-      const foundErr = this.name.match(re);
+      const foundErr = this.name.match(regex);
       this.errors = [];
       if (!this.name) {
         return this.isNameError = true;
       }
       if (foundErr) {
+        console.log('AAAA ERRORE NOME');
         this.errors.push('Not a valid name!');
+        console.log('--->', this.errors);
         return this.isNameError = true;
       }
       return this.isNameError = false;
     },
 
     checkSurname: function() {
-      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
-      const foundErr = this.surname.match(re);
+      const foundErr = this.surname.match(regex);
       this.errors = [];
       if (!this.surname) {
         //this.isSurError = true;
         return this.isSurError = true;
       }
       if (foundErr) {
+        console.log('BBBB ERRORE COGNOME');
         this.errors.push('Not a valid surname!');
+        console.log('--->', this.errors);
         return this.isSurError = true;
       }
       return this.isSurError = false;
@@ -145,7 +148,7 @@ export default {
       var checkName = this.checkName();
       var checkSurname = this.checkSurname();
       this.checkDate();
-
+      console.log('ERRORS: ', this.errors);
       if(!checkName && !checkSurname){
         this.createTaxCode();
       }
