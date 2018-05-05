@@ -3,7 +3,7 @@
   <div class="tax-code-card">
     <div class="header-card"></div>
     <div class="content-card">
-      <form id="taxCodeForm" v-on:submit="checkForm">
+      <form id="taxCodeForm" @submit.prevent="checkForm">
 
         <p v-if="errors.length">
           <b>Please correct the following error(s):</b>
@@ -32,9 +32,9 @@
           <label class="col-sm-2 col-form-label" for="sex">SESSO</label>
           <div class="col-sm-2">
             <select v-model="sex" id="sex" class="form-control">
-                  <option selected>M</option>
-                  <option>F</option>
-                </select>
+              <option selected>M</option>
+              <option>F</option>
+            </select>
           </div>
         </div>
         <div class="form-group row">
@@ -53,8 +53,6 @@
             placeholder="Luogo di Nascita"
             type="google">
             </vue-instant>
-
-            <!--input v-model="birthPlace" v-bind:class="{error: isBirthPlaceError}" type="text" class="form-control" id="birthPlace" placeholder="Luogo di Nascita"-->
           </div>
         </div>
         <div class="form-group row">
@@ -67,7 +65,7 @@
             <datepicker v-model="birthDate" name="birthPlace" class="form-control" v-bind:class="{error: isBirthDateError}" id="BirthDate"></datepicker>
           </div>
         </div>
-        <input type="submit" value="Submit">
+        <button type="submit">Submit</button>
       </form>
     </div>
   </div>
@@ -75,7 +73,6 @@
 </template>
 
 <script>
-
 import Datepicker from 'vuejs-datepicker';
 
 export default {
@@ -150,10 +147,11 @@ export default {
       var checkSurname = this.checkSurname();
       var checkDate = this.checkDate();
       var checkBirthPlace = this.checkBirthPlace();
-      this.checkDate();
-
+      // this.checkDate();
+      console.log(checkName, checkSurname, checkDate, checkBirthPlace);
       if (!checkName && !checkSurname && !checkDate) {
         this.createTaxCode();
+        debugger;
       }
     },
 
@@ -560,6 +558,7 @@ export default {
       this.taxCodeOut += nameResult;
       this.taxCodeOut += birthResult;
       this.taxCodeOut += lastCharResult;
+      debugger;
     },
 
     loadDistrict: function(callback) {
@@ -612,11 +611,7 @@ export default {
     }
   },
   beforeMount() {
-    this.loadDistrict(output => {
-      let test = output.results.bindings.filter(function(dist) {
-        return dist.label.value === 'Palermo';
-      });
-    });
+    this.loadDistrict();
   },
   components: {
     Datepicker
