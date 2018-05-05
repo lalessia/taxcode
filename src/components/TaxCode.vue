@@ -50,6 +50,9 @@
             id="birthPlace"
             :show-autocomplete="true"
             :autofocus="false"
+            @enter="chosenDistrict"
+            @key-right="chosenDistrict"
+            @selected="selected"
             placeholder="Luogo di Nascita"
             type="google">
             </vue-instant>
@@ -95,11 +98,21 @@ export default {
       district: '',
       birthDate: '',
       districts: [],
-      suggestionAttribute: 'district'
+      suggestionAttribute: 'district',
+      object: {}
     };
   },
 
   methods: {
+    selected: function(obj){
+      this.object = obj;
+    },
+    chosenDistrict: function() {
+      var birthPlaceArr = this.birthPlace.split("(");
+      this.birthPlace = '';
+      this.district = birthPlaceArr[1].slice(0, -1);
+      console.log(this.object);
+    },
     checkName: function() {
       const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
       const foundErr = this.name.match(re);
@@ -152,7 +165,7 @@ export default {
       var checkBirthPlace = this.checkBirthPlace();
       this.checkDate();
 
-      if (!checkName && !checkSurname && !checkDate) {
+      if (!checkName && !checkSurname && !checkDate && !checkBirthPlace) {
         this.createTaxCode();
       }
     },
