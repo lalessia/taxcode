@@ -129,7 +129,6 @@ export default {
       const foundErr = this.surname.match(re);
       this.errors = [];
       if (!this.surname) {
-        //this.isSurError = true;
         return this.isSurError = true;
       }
       if (foundErr) {
@@ -197,7 +196,6 @@ export default {
     generateSurnameCode: function(surnameSplit){
       var result = '';
 
-      //inserimento consonanti
       if(surnameSplit.consonants.length > 2){
         for(var i = 0; i < 3; i++){
           result += surnameSplit.consonants[i];
@@ -214,7 +212,6 @@ export default {
         }
       }
 
-      //inserimento vocali
       if(result.length < 3){
         var goal = (3 - result.length);
         for(var j = 0; j < goal; j++){
@@ -249,7 +246,6 @@ export default {
         }
       }
 
-      //inserimento vocali
       if(result.length < 3){
         var goal = (3 - result.length);
         for(var j = 0; j < goal; j++){
@@ -598,14 +594,6 @@ export default {
             break;
           }
         }
-        // singleValue = oddValuesSchema.filter(function(el) {
-        //   var value = 0
-        //   if (el.char === oddValues[i]) {
-        //     value = el.value;
-        //     totalResult += value;
-        //     return value;
-        //   }
-        // });
       }
       console.log('intermediate result',totalResult);
 
@@ -616,14 +604,6 @@ export default {
             break;
           }
         }
-        // singleValue = evenValuesSchema.filter(function(el) {
-        //   var value = 0;
-        //   if (el.char === evenValues[j]) {
-        //     value = el.value;
-        //     totalResult += value;
-        //     return value;
-        //   }
-        // });
       }
 
       console.log('result',totalResult);
