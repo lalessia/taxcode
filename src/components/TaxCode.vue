@@ -96,7 +96,8 @@ export default {
       birthDate: '',
       districts: [],
       suggestionAttribute: 'district',
-      object: {}
+      object: {},
+      cadastralCode: ''
     };
   },
 
@@ -106,12 +107,11 @@ export default {
     },
     chosenDistrict: function() {
       var birthPlaceArr = this.birthPlace.split("(");
-      //this.birthPlace = '';
+      this.cadastralCode = this.object.codCat;
       this.district = birthPlaceArr[1].slice(0, -1);
-      console.log(this.object);
     },
     checkName: function() {
-      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
+      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]]/g;
       const foundErr = this.name.match(re);
       this.errors = [];
       if (!this.name) {
@@ -125,7 +125,7 @@ export default {
     },
 
     checkSurname: function() {
-      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]\s]/g;
+      const re = /[0-9[.,\\/#!$%^&*;:{}=\-_`~()\]]/g;
       const foundErr = this.surname.match(re);
       this.errors = [];
       if (!this.surname) {
@@ -166,43 +166,97 @@ export default {
       }
     },
 
-    stringResult: function(stringCheck) {
-      var result;
+    splitChar: function(stringCheck) {
+      var result = {};
+
       var vocals = ['A', 'E', 'I', 'O', 'U'];
-      for (var i = 0; i < stringCheck.length; i++) {
-        var isVocal = vocals.includes(stringCheck[i]);
-        // alert(this.surname[i] + ' è una vocale: ' + isVocal);
-        if (!isVocal) {
-          if (result === undefined) {
-            result = stringCheck[i];
-          } else {
-            result += stringCheck[i];
-          }
+      var str = stringCheck.replace(/\s/g,'');
+
+      var vocalsInStr = [];
+      var consonantsInStr = [];
+
+      function isVocal(value) {
+        if(vocals.includes(value)){
+          vocalsInStr[vocalsInStr.length] = value;
+        }else{
+          consonantsInStr[consonantsInStr.length] = value;
         }
       }
 
-      if (result.length < 3) {
-        for (var i = 0; i < stringCheck.length; i++) {
-          var isVocal = vocals.includes(stringCheck[i]);
-          if (isVocal) {
-            if (result === undefined) {
-              result = stringCheck[i];
-            } else {
-              result += stringCheck[i];
-            }
-          }
+      var strInArray = str.split('');
+      for (var i = 0; i < strInArray.length; i++){
+        isVocal(strInArray[i]);
+      }
+
+      result.vocals = vocalsInStr;
+      result.consonants = consonantsInStr;
+
+      return result;
+    },
+
+    generateSurnameCode: function(surnameSplit){
+      var result = '';
+
+      //inserimento consonanti
+      if(surnameSplit.consonants.length > 2){
+        for(var i = 0; i < 3; i++){
+          result += surnameSplit.consonants[i];
+        }
+      }else{
+        for(var i = 0; i < surnameSplit.consonants.length; i++){
+          result += surnameSplit.consonants[i];
         }
       }
 
-      if (result.length < 3) {
-        for (var i = result.length; i < 3; i++) {
-          if (result === undefined) {
-            result = 'X';
-          } else {
-            result += 'X';
-          }
+      if(surnameSplit.vocals.length < 3 && result.length < 3){
+        for (var k = surnameSplit.vocals.length; k <3; k++){
+          surnameSplit.vocals[surnameSplit.vocals.length] = 'X';
         }
       }
+
+      //inserimento vocali
+      if(result.length < 3){
+        var goal = (3 - result.length);
+        for(var j = 0; j < goal; j++){
+          result += surnameSplit.vocals[j];
+        }
+      }
+
+      return result;
+    },
+
+    generateNameCode: function(nameSplit){
+      var result = '';
+      if(nameSplit.consonants.length > 2){
+        if(nameSplit.consonants.length === 3){
+          for(var i = 0; i < 3; i++){
+            result += nameSplit.consonants[i];
+          }
+        } else if (nameSplit.consonants.length > 3){
+          result += nameSplit.consonants[0];
+          result += nameSplit.consonants[2];
+          result += nameSplit.consonants[3];
+        }
+      }else{
+        for(var i = 0; i < nameSplit.consonants.length; i++){
+          result += nameSplit.consonants[i];
+        }
+      }
+
+      if(nameSplit.vocals.length < 3 && result.length < 3){
+        for (var k = nameSplit.vocals.length; k <3; k++){
+          nameSplit.vocals[nameSplit.vocals.length] = 'X';
+        }
+      }
+
+      //inserimento vocali
+      if(result.length < 3){
+        var goal = (3 - result.length);
+        for(var j = 0; j < goal; j++){
+          result += nameSplit.vocals[j];
+        }
+      }
+
       return result;
     },
 
@@ -561,13 +615,18 @@ export default {
     },
 
     createTaxCode: function() {
-      var surnameResult = this.stringResult(this.surname);
-      var nameResult = this.stringResult(this.name);
+      var surnameSplit = this.splitChar(this.surname);
+      var nameSplit = this.splitChar(this.name);
+
+      var surnameResult = this.generateSurnameCode(surnameSplit);
+      var nameResult = this.generateNameCode(nameSplit);
+
       var birthResult = this.birthDateResult(this.birthDate);
       var lastCharResult = this.lastCharResult();
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
       this.taxCodeOut += birthResult;
+      this.taxCodeOut += this.cadastralCode;
       this.taxCodeOut += lastCharResult;
     },
 
