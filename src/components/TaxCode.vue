@@ -288,51 +288,53 @@ export default {
       var oddValues = [];
 
       for (var i = 0; i < this.taxCodeOut.length; i += 2) {
-        oddValues[oddValues.length] = [this.taxCodeOut[i]];
+        oddValues[oddValues.length] = this.taxCodeOut[i];
       }
       for (var i = 1; i < this.taxCodeOut.length; i += 2) {
-        evenValues[evenValues.length] = [this.taxCodeOut[i]];
+        evenValues[evenValues.length] = this.taxCodeOut[i];
       }
 
+      console.log(oddValues);
+      console.log(evenValues);
       var evenValuesSchema = new Array();
       evenValuesSchema.push({
-        char: 0,
+        char: '0',
         value: 0
       });
       evenValuesSchema.push({
-        char: 1,
+        char: '1',
         value: 1
       });
       evenValuesSchema.push({
-        char: 2,
+        char: '2',
         value: 2
       });
       evenValuesSchema.push({
-        char: 3,
+        char: '3',
         value: 3
       });
       evenValuesSchema.push({
-        char: 4,
+        char: '4',
         value: 4
       });
       evenValuesSchema.push({
-        char: 5,
+        char: '5',
         value: 5
       });
       evenValuesSchema.push({
-        char: 6,
+        char: '6',
         value: 6
       });
       evenValuesSchema.push({
-        char: 7,
+        char: '7',
         value: 7
       });
       evenValuesSchema.push({
-        char: 8,
+        char: '8',
         value: 8
       });
       evenValuesSchema.push({
-        char: 9,
+        char: '9',
         value: 9
       });
       evenValuesSchema.push({
@@ -442,43 +444,43 @@ export default {
 
       var oddValuesSchema = new Array();
       oddValuesSchema.push({
-        char: 0,
+        char: '0',
         value: 1
       });
       oddValuesSchema.push({
-        char: 1,
+        char: '1',
         value: 0
       });
       oddValuesSchema.push({
-        char: 2,
+        char: '2',
         value: 5
       });
       oddValuesSchema.push({
-        char: 3,
+        char: '3',
         value: 7
       });
       oddValuesSchema.push({
-        char: 4,
+        char: '4',
         value: 9
       });
       oddValuesSchema.push({
-        char: 5,
+        char: '5',
         value: 13
       });
       oddValuesSchema.push({
-        char: 6,
+        char: '6',
         value: 15
       });
       oddValuesSchema.push({
-        char: 7,
+        char: '7',
         value: 17
       });
       oddValuesSchema.push({
-        char: 8,
+        char: '8',
         value: 19
       });
       oddValuesSchema.push({
-        char: 9,
+        char: '9',
         value: 21
       });
       oddValuesSchema.push({
@@ -588,27 +590,43 @@ export default {
 
       var totalResult = 0;
       var singleValue = 0;
+
       for (var i = 0; i < oddValues.length; i++) {
-        singleValue = oddValuesSchema.filter(function(el) {
-          var value = 0
-          if (el.char === oddValues[i][0]) {
-            value = el.value;
-            totalResult += value;
-            return value;
+        for(var j = 0; j < oddValuesSchema.length; j++){
+          if(oddValuesSchema[j].char === oddValues[i]){
+            totalResult += oddValuesSchema[j].value;
+            break;
           }
-        });
+        }
+        // singleValue = oddValuesSchema.filter(function(el) {
+        //   var value = 0
+        //   if (el.char === oddValues[i]) {
+        //     value = el.value;
+        //     totalResult += value;
+        //     return value;
+        //   }
+        // });
       }
-      for (var j = 0; j < evenValues.length; j++) {
-        singleValue = evenValuesSchema.filter(function(el) {
-          var value = 0;
-          if (el.char === evenValues[j][0]) {
-            value = el.value;
-            totalResult += value;
-            return value;
+      console.log('intermediate result',totalResult);
+
+      for (var k = 0; k < evenValues.length; k++) {
+        for(var w = 0; w < evenValuesSchema.length; w++){
+          if(evenValuesSchema[w].char === evenValues[k]){
+            totalResult += evenValuesSchema[w].value;
+            break;
           }
-        });
+        }
+        // singleValue = evenValuesSchema.filter(function(el) {
+        //   var value = 0;
+        //   if (el.char === evenValues[j]) {
+        //     value = el.value;
+        //     totalResult += value;
+        //     return value;
+        //   }
+        // });
       }
 
+      console.log('result',totalResult);
       var lastChar = '';
       lastChar = String.fromCharCode((totalResult % 26) + 65);
       return lastChar;
@@ -617,16 +635,16 @@ export default {
     createTaxCode: function() {
       var surnameSplit = this.splitChar(this.surname);
       var nameSplit = this.splitChar(this.name);
-
       var surnameResult = this.generateSurnameCode(surnameSplit);
       var nameResult = this.generateNameCode(nameSplit);
-
       var birthResult = this.birthDateResult(this.birthDate);
-      var lastCharResult = this.lastCharResult();
+
       this.taxCodeOut = surnameResult;
       this.taxCodeOut += nameResult;
       this.taxCodeOut += birthResult;
       this.taxCodeOut += this.cadastralCode;
+
+      var lastCharResult = this.lastCharResult();
       this.taxCodeOut += lastCharResult;
     },
 
