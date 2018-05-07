@@ -6,6 +6,9 @@ import App from './App';
 import router from './router';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'vue-instant/dist/vue-instant.css';
+import VueInstant from 'vue-instant';
+Vue.use(VueInstant);
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
@@ -14,6 +17,8 @@ Vue.use(BootstrapVue);
 new Vue({
   el: '#app',
   router,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 });
