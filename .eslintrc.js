@@ -25,6 +25,8 @@ module.exports = {
     'semi': [2, 'always'],
     // no whitespace is allowed between the function name or function keyword and the opening paren
     'space-before-function-paren': ['error', 'never'],
+    // allow assignment in return statement
+    'no-return-assign': 'off',
     // need spacing around keywords and keyword-like tokens
     'keyword-spacing': 2,
     // allow async-await
